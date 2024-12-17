@@ -4,7 +4,7 @@ import { BooleanUtils } from "@/utils/utils.common";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Checkbox, DatePicker, Flex, Form, Input, InputNumber, Radio, Select, Switch, Upload } from "antd";
 import dayjs from "dayjs";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { Cookies } from "react-cookie";
 import SunEditor from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css';
@@ -212,9 +212,17 @@ const BaseForm = ({
             }}>
                 {
                     columns.map((row: any) => (
-                        <Form.Item key={row?.name} name={row?.name} label={row?.label} required={row.required}>
-                            {generateFormItem(row, data?.[row?.name])}
-                        </Form.Item>
+                        <React.Fragment key={row?.name}>
+                            <Form.Item name={row?.name} label={row?.label} required={row.required}>
+                                {generateFormItem(row, data?.[row?.name])}
+                            </Form.Item>
+                            {
+                                row.type === InputType.UPLOAD && data?.[row?.name] && 
+                                <Form.Item label={ "현재 이미지" }>
+                                    <img src={ data?.[row?.name] } alt="storeImage" style={{ padding: 8 }}/>
+                                </Form.Item>
+                            }
+                        </React.Fragment>
                     ))
                 }
                 <Form.Item>
