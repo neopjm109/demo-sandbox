@@ -3,25 +3,282 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.base-form .ant-form-item {
+  margin-bottom:0px;
+  border-top: 1px solid #aaa;
+  border-left: 1px solid #aaa;
+  border-right: 1px solid #aaa;
+}
+
+.base-form .ant-form-item:last-of-type {
+  border-left: 0px solid #aaa;
+  border-right: 0px solid #aaa;
+  padding: 16px 0px;
+}
+
+.base-form .ant-form-item .ant-form-item-label {
+  font-weight: bold;
+  background: #eee;
+  border-right: 1px solid #aaa;
+  padding: 0px 4px 0px 8px;
+  width: 128px;
+}
+
+.base-form .ant-form-item .ant-form-item-label label::after {
+  content: '';
+}
+
+.base-form .ant-form-item .ant-input,
+.base-form .ant-form-item .ant-input-number,
+.base-form .ant-form-item .ant-select .ant-select-selector,
+.base-form .ant-form-item .ant-picker,
+.base-form .ant-form-item .sun-editor {
+  border-radius: 0;
+  border-width: 0;
+}
+
+.base-form .ant-form-item .ant-radio-group,
+.base-form .ant-form-item .ant-checkbox-group {
+  padding-left: 8px;
+}
+.base-form .ant-form-item .ant-radio-group .ant-radio-button-wrapper {
+  margin-top:4px;
+  margin-bottom:4px;
+}
+
+.base-form .ant-form-item .ant-input-number,
+.base-form .ant-form-item .ant-picker {
+  width: 100%;
+}
+
+.base-form .ant-form-item .ant-switch {
+  margin-left: 6px;
+  margin-top: -2px;
+}
+.base-form .ant-form-item .ant-switch.ant-switch-small {
+  margin-left: 4px;
+  margin-top: -4px;
+}
+
+.base-form .ant-form-item textarea.ant-input {
+  resize: none;
+}
+
+.base-form .ant-form-item .ant-upload-list {
+  padding: 8px;
+}
+
+.base-form .ant-form-item .sun-editor {
+  padding: 1px;
+}
+
+
+.order-app {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+.order-app .app-container nav::-webkit-scrollbar {
+  display: none;
+}
+
+.order-app {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.order-app .app-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 420px;
+  height: 100lvh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  max-width: 100%;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+.order-app .app-container .background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.order-app .app-container .background .bg-image {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: contain;
+  background-attachment: fixed;
+}
+
+.order-app .app-container .background .bg-image.ios {
+  background-size: cover;
+  background-attachment: initial;
+}
+
+.order-app .app-container .background .bg-dim {
+  position: absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  background-color: rgba(0,0,0,0.33);
+  z-index:1;
+}
+
+.order-app .app-container .title-container {
+  display: flex;
+  min-height: 78lvh;
+  height: 78lvh;
+  align-items: flex-end;
+  color: #fff;
+  padding: 1rem;
+}
+
+.order-app .app-container .title-container .title {
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+
+.order-app .app-container .app-contents {
+  background-color: #fff;
+  margin-bottom: 48px;
+}
+
+.order-app .app-container .app-nav {
+  position: sticky;
+  display: flex;
+  align-items: center;
+  overflow-x: scroll;
+  background: #005500;
+  color: #fff;
+  border-bottom: 1px solid #ccc;
+  gap: 16px;
+  top: 0px;
+  height: 64px;
+  z-index: 1;
+}
+
+.order-app .app-container .app-nav a {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  text-decoration: none;
+}
+
+.order-app .app-container .app-nav a.nav-active {
+  position: relative;
+  background: #005500;
+  font-weight: 600;
+}
+.order-app .app-container .app-nav a.nav-active::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  bottom: 1px;
+  border-bottom: 4px solid #fff;
+}
+
+.order-app .app-container .menu-section {
+  height: 640px;
+  padding: 0 1rem;
+}
+
+.order-app .app-container .menu-section .section-title {
+  position: sticky;
+  display: flex;
+  top: 64px;
+  font-weight: 700;
+  height: 48px;
+  background: rgba(255,255,255,0.75);
+  align-items: center;
+}
+
+.order-app .app-container .bottom-navigation {
+  position: sticky;
+  bottom: 10px;
+  z-index: 10;
+}
+
+.order-app .app-container .bottom-navigation > .buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 16px;
+  gap: 16px;
+}
+
+
+.order-app .app-container .bottom-navigation > .buttons > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 40px;
+  padding: 2px 16px;
+  font-size: 14px;
+  transition: all ease 0.2s;
+  cursor:pointer;
+  outline: none;
+}
+
+.order-app .app-container .bottom-navigation .order-button {
+  flex: 1;
+  background: #005500;
+  height: 40px;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0px 0px 6px 0px #333;
+}
+
+.order-app .app-container .bottom-navigation .order-button:hover,
+.order-app .app-container .bottom-navigation .order-button:active {
+  background: #227722;
+}
+
+.order-app .app-container .bottom-navigation .list-button {
+  background: #fff;
+  height:38px;
+  box-shadow: 0px 0px 6px -1px #333;
 }

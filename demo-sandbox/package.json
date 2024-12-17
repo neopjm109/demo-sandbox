@@ -9,18 +9,39 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/cssinjs": "^1.22.0",
+    "@ant-design/icons": "^5.5.1",
+    "@tanstack/react-query": "^5.60.6",
+    "antd": "^5.22.1",
+    "axios": "^1.7.7",
+    "crypto-js": "^4.2.0",
+    "dayjs": "^1.11.13",
+    "jsonwebtoken": "^9.0.2",
+    "next": "14.2.5",
     "react": "^18",
+    "react-calendar": "^5.1.0",
+    "react-cookie": "^7.2.2",
     "react-dom": "^18",
-    "next": "14.2.20"
+    "react-scrollspy-navigation": "^2.0.6",
+    "recharts": "^2.13.3",
+    "slick-carousel": "^1.8.1",
+    "suneditor": "^2.47.0",
+    "suneditor-react": "^3.6.1",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
+    "@types/crypto-js": "^4.2.2",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.9.1",
+    "@types/node-rsa": "^1.1.4",
     "@types/react": "^18",
+    "@types/react-calendar": "^4.1.0",
     "@types/react-dom": "^18",
+    "@types/react-slick": "^0.23.13",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.20"
+    "typescript": "^5"
   }
 }
