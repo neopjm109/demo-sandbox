@@ -23,6 +23,7 @@
     "react-cookie": "^7.2.2",
     "react-dom": "^18",
     "react-scrollspy-navigation": "^2.0.6",
+    "react-syntax-highlighter": "^15.6.1",
     "recharts": "^2.13.3",
     "slick-carousel": "^1.8.1",
     "suneditor": "^2.47.0",
