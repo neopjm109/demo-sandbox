@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type {} from '@redux-devtools/extension'
 
 interface AppStore {
     info: any;
@@ -14,7 +15,7 @@ const useAppStore = create<AppStore>(
             state.info = { ...data };
             return { ...state };
         }),
-        loading: true,
+        loading: false,
         setLoading: (data) => set(data)
     })
 );

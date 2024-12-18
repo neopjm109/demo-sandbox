@@ -32,7 +32,7 @@ const Engine = ({
                 ModalProvider,
                 OfflineObserver
             ]}>
-                <BaseLayout>{children}</BaseLayout>
+                {children}
             </Composer>
         </ErrorBoundary>
     );
