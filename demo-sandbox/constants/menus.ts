@@ -66,37 +66,13 @@ const items: MenuItem[] = [
         ]
     },
     {
-        key: "http",
-        label: "Http Client",
-        children: [
-            {
-                key: "/http/fetch",
-                label: "Fetch (NextJS)"
-            },
-            {
-                key: "/http/axios",
-                label: "axios"
-            }
-        ]
-    },
-    {
-        key: "state",
-        label: "State Management",
-        children: [
-            {
-                key: "/state/zustand",
-                label: "Zustand"
-            },
-            {
-                key: "/state/reactQuery",
-                label: "React Query"
-            }
-        ]
-    },
-    {
         key: 'hash-crypto',
         label: "Hash/Crypto",
         children: [
+            {
+                key: "jwt",
+                label: "JWT Token"
+            },
             {
                 key: "hash",
                 label: "Hash",
@@ -118,7 +94,7 @@ const items: MenuItem[] = [
                 type: "group",
                 children: [
                     {
-                        key: "/cryoto/aes256",
+                        key: "/crypto/aes256",
                         label: "AES256"
                     }
                 ]
@@ -153,24 +129,16 @@ const items: MenuItem[] = [
         ]
     },
     {
-        key: "jwt",
-        label: "JWT Token",
+        key: "state",
+        label: "State Management",
         children: [
             {
-                key: "/jwt",
-                label: "JWT TEST"
+                key: "/state/zustand",
+                label: "Zustand"
             },
             {
-                key: "/jwt/localstorage",
-                label: "Local Storage"
-            },
-            {
-                key: "/jwt/cookie",
-                label: "Cookie"
-            },
-            {
-                key: "/jwt/session",
-                label: "Session"
+                key: "/state/reactQuery",
+                label: "React Query"
             }
         ]
     }
