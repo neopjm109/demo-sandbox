@@ -66,13 +66,9 @@ const items: MenuItem[] = [
         ]
     },
     {
-        key: 'hash-crypto',
-        label: "Hash/Crypto",
+        key: 'hash-encrypt',
+        label: "Hash/Encryption",
         children: [
-            {
-                key: "jwt",
-                label: "JWT Token"
-            },
             {
                 key: "hash",
                 label: "Hash",
@@ -89,14 +85,18 @@ const items: MenuItem[] = [
                 ]
             },
             {
-                key: "crypto",
-                label: "Crypto",
+                key: "encrypt",
+                label: "Encryption",
                 type: "group",
                 children: [
                     {
-                        key: "/crypto/aes256",
+                        key: "/encrypt/aes256",
                         label: "AES256"
-                    }
+                    },
+                    {
+                        key: "/encrypt/jwt",
+                        label: "JWT Token"
+                    },
                 ]
             },
             {
