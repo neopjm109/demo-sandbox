@@ -89,7 +89,7 @@ const items: MenuItem[] = [
                 ]
             },
             {
-                key: "cryoto",
+                key: "crypto",
                 label: "Crypto",
                 type: "group",
                 children: [
