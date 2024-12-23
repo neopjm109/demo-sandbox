@@ -22,7 +22,7 @@ const OfflineObserver = ({
         }
     });
     
-    return <>{children}</>
+    return children
 }
 
 export default OfflineObserver;

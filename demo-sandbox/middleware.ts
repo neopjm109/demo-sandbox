@@ -1,5 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
+/**
+ * Middleware는 Frontend 보다 API에 더 어울리므로, API 사용시에 개발
+ * @param request 
+ * @returns 
+ */
+
 export default function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     console.log(pathname);
@@ -7,5 +13,5 @@ export default function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: '/:path*',
+    matcher: '/api/:path*',
 }

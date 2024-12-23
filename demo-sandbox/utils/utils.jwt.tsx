@@ -1,5 +1,4 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
-import { cookies } from 'next/headers';
 
 const TYPE = "JWT";
 const ROLE = "";
@@ -9,7 +8,7 @@ const MINUTE = 60;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
 
-const claims = (usage: string, iat: number, data?: any): any => {
+const payload = (usage: string, iat: number, data?: any): any => {
     return {
         typ: TYPE,
         role: ROLE,
@@ -27,31 +26,22 @@ const options = (uid?: any, expiresIn?: number): SignOptions => {
     }
 }
 
-const generate = (data?: any) => {
+const sign = (data?: any) => {
     let now = Date.now();
     let iat = Math.floor(now / 1000);
     let accessExpires = iat + (3 * HOUR);
     let refreshExpires = iat + (7 * DAY);
 
     let accessToken = jwt.sign(
-        claims("access", iat, data),
+        payload("access", iat, data),
         SECRET_KEY,
         options(data?.uid, accessExpires)
     );
     let refreshToken = jwt.sign(
-        claims("refresh", iat, data),
+        payload("refresh", iat, data),
         SECRET_KEY,
         options(data?.uid, refreshExpires)
     );
-
-    let cookieStore = cookies();
-    cookieStore.set("x-access-token", accessToken);
-    cookieStore.set("x-refresh-token", refreshToken, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-        maxAge: refreshExpires
-    });
 
     return {
         accessToken, refreshToken, accessExpires, refreshExpires
@@ -60,9 +50,9 @@ const generate = (data?: any) => {
 
 const refresh = (token: string) => {
     try {
-        let decoded: any = jwt.verify(token, SECRET_KEY);
-        if (decoded.usage === "refresh") {
-            return generate({ uid: decoded.uid });
+        let payload: any = claims(token);
+        if (payload.usage === "refresh") {
+            return sign({ uid: payload.uid });
         }
         return {
             "result": "not refresh token"
@@ -75,79 +65,25 @@ const refresh = (token: string) => {
     }
 }
 
+const claims = (token: string): any => jwt.verify(token, SECRET_KEY);
+const claimsByKey = (token: string, key: string): any => claims(token)?.[key];
+
 const verify = (token: string): any => {
     try {
-        let decoded = jwt.verify(token, SECRET_KEY);
-        return {
-            "result": "success",
-            "data": decoded
-        }
+        let decoded: any = claims(token);
+        return decoded !== null;
     }
     catch (e: any) {
-        return {
-            "result": e.message
-        }
     }
-}
-
-const validate = (key: string, onSuccess: Function, onFailure: Function) => {
-    let cookieStore = cookies();
-    let token: any = cookieStore.get(key);
-    let verified: any = verify(token?.value);
-    if (verified.result === "success") {
-        onSuccess();
-    }
-    else {
-        onFailure(verified.result);
-    }
-}
-
-const auth = () => {
-    let result : { code: string, message: string, data?: object } = { code: "", message: ""};
-    let cookieStore = cookies();
-    validate(
-        "x-access-token",
-        () => {
-            result = {
-                code: "200",
-                message: "success",
-                data: {
-                    accessToken: cookieStore.get("x-access-token"),
-                    refreshToken: cookieStore.get("x-access-token")
-                }
-            }
-        },
-        () => {
-            validate(
-                "x-refresh-token",
-                () => {
-                    let tokens = generate();
-                    result = {
-                        code: "200",
-                        message: "success",
-                        data: {
-                            accessToken: tokens.accessToken,
-                            refreshToken: tokens.refreshToken
-                        }
-                    }
-                },
-                (message?: string) => {
-                    result = {
-                        code: "401",
-                        message: message ?? "Not authorized"
-                    }
-                }
-            )
-        }
-    )
-    return result;
+    return null;
 }
 
 const JwtUtils = {
-    generate,
+    sign,
     refresh,
     verify,
-    auth
+    claims,
+    claimsByKey
 }
 
 export default JwtUtils;

@@ -7,28 +7,28 @@ import { useEffect } from "react";
 import { Cookies } from "react-cookie";
 
 const Authenticator = ({ children } : { children?: React.ReactNode }) => {
-    // const { setLoading } = useAppStore();
+    const { setLoading } = useAppStore();
 
-    // const load = async () => {
-    //     const cookies = new Cookies();
-    //     const accessToken = cookies.get("x-access-token");
+    const load = async () => {
+        const cookies = new Cookies();
+        const accessToken = cookies.get("x-access-token");
 
-    //     // 비어있으면 refresh
-    //     if (BooleanUtils.isEmpty(accessToken)) {
-    //         await instance.post("/api/auth/refresh");
-    //     }
+        // 비어있으면 refresh 실행
+        if (BooleanUtils.isEmpty(accessToken)) {
+            // await instance.post("/api/auth/refresh");
+        }
 
-    //     // const res = await instance.post("/api/admin/info");
-    //     // setInfo(res.data.data);
+        // const res = await instance.post("/api/admin/info");
+        // setInfo(res.data.data);
 
-    //     setLoading(false);
-    // }
+        setLoading(false);
+    }
 
-    // useEffect(() => {
-    //     load();
-    // }, []);
+    useEffect(() => {
+        load();
+    }, []);
     
-    return <>{children}</>;
+    return children;
 }
 
 export default Authenticator;
