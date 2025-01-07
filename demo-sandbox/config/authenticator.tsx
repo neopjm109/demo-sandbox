@@ -1,32 +1,24 @@
 'use client';
 
+import useJwtAuth from "@/hooks/useJwtAuth";
+import useLink from "@/hooks/useLink";
 import useAppStore from "@/stores/store.app";
-import instance from "@/utils/http/utils.http.axios";
-import { BooleanUtils } from "@/utils/utils.common";
-import { useEffect } from "react";
-import { Cookies } from "react-cookie";
 
 const Authenticator = ({ children } : { children?: React.ReactNode }) => {
     const { setLoading } = useAppStore();
-
-    const load = async () => {
-        const cookies = new Cookies();
-        const accessToken = cookies.get("x-access-token");
-
-        // 비어있으면 refresh 실행
-        if (BooleanUtils.isEmpty(accessToken)) {
-            // await instance.post("/api/auth/refresh");
+    const { onLink } = useLink();
+    const { status } = useJwtAuth({
+        matcher: ["/"],
+        onAuthSuccess: () => {
+            setLoading(false);
+            console.log("인증 실패");
+        },
+        onAuthFailure: () => {
+            setLoading(false);
+            console.log("인증 실패");
+            onLink("/jwt");
         }
-
-        // const res = await instance.post("/api/admin/info");
-        // setInfo(res.data.data);
-
-        setLoading(false);
-    }
-
-    useEffect(() => {
-        load();
-    }, []);
+    });
     
     return children;
 }

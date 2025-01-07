@@ -1,82 +1,91 @@
-import jwt, { SignOptions } from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 
-const TYPE = "JWT";
-const ROLE = "";
-const SECRET_KEY = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";      //64자리
+const ROLE = "ADMIN";
+const SECRET_KEY = "eff0dc5014184aaa3da921774e4fc1466c76793845a9beb43d36582b5b914520";
 const ALGORITHM = "HS256";
-const MINUTE = 60;
-const HOUR = 60 * MINUTE;
-const DAY = 24 * HOUR;
+const MINUTES = 60;
+const HOURS = 60 * MINUTES;
+const DAY = 24 * HOURS;
 
-const payload = (usage: string, iat: number, data?: any): any => {
-    return {
-        typ: TYPE,
-        role: ROLE,
-        ...data,
-        iat,
-        usage
-    }
-}
-
-const options = (uid?: any, expiresIn?: number): SignOptions => {
-    return {
-        audience: uid ?? "0",
-        algorithm: ALGORITHM,
-        expiresIn
-    }
-}
-
-const sign = (data?: any) => {
+const sign = (payload?: object) => {
     let now = Date.now();
     let iat = Math.floor(now / 1000);
-    let accessExpires = iat + (3 * HOUR);
-    let refreshExpires = iat + (7 * DAY);
+    let accessExpire = Math.floor(now / 1000) + (3 * HOURS);
+    let refreshExpire = Math.floor(now / 1000) + (7 * DAY);
 
     let accessToken = jwt.sign(
-        payload("access", iat, data),
+        {
+            ...payload,
+            role: ROLE,
+            usage: "access",
+            iat: iat,
+            nbf: iat,
+            exp: accessExpire
+        },
         SECRET_KEY,
-        options(data?.uid, accessExpires)
+        {
+            algorithm: ALGORITHM
+        }
     );
+    
     let refreshToken = jwt.sign(
-        payload("refresh", iat, data),
+        {
+            ...payload,
+            role: ROLE,
+            usage: "refresh",
+            iat: iat,
+            nbf: iat,
+            exp: refreshExpire
+        },
         SECRET_KEY,
-        options(data?.uid, refreshExpires)
+        {
+            algorithm: ALGORITHM
+        }
     );
 
     return {
-        accessToken, refreshToken, accessExpires, refreshExpires
-    }
+        accessToken, refreshToken, accessExpire, refreshExpire
+    };
 }
 
 const refresh = (token: string) => {
-    try {
-        let payload: any = claims(token);
-        if (payload.usage === "refresh") {
-            return sign({ uid: payload.uid });
-        }
-        return {
-            "result": "not refresh token"
-        }
+    let data = null;
+    let code = "200";
+    let message = "success";
+
+    let payload = claims(token);
+    
+    if (payload.message !== "success") {
+        code = "401";
+        message = payload.message;
     }
-    catch (e: any) {
-        return {
-            "result": e.message
-        }
+    else if (payload?.data?.usage === 'refresh') {
+        data = sign({ uid: payload.uid });
+    }
+
+    return {
+        code,
+        message,
+        data
     }
 }
 
-const claims = (token: string): any => jwt.verify(token, SECRET_KEY);
-const claimsByKey = (token: string, key: string): any => claims(token)?.[key];
-
-const verify = (token: string): any => {
+const claims : any = (token: string) => {
     try {
-        let decoded: any = claims(token);
-        return decoded !== null;
+        return {
+            message: "success",
+            data: jwt.verify(token, SECRET_KEY)
+        };
     }
     catch (e: any) {
+        return {
+            message: e.message
+        };
     }
-    return null;
 }
+
+const verify : any = (token: string) => claims(token)?.message === "success";
+const claimsByKey : any = (token: string, key: string) => claims(token)?.data?.[key];
 
 const JwtUtils = {
     sign,
