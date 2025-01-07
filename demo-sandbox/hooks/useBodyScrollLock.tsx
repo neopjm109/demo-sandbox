@@ -1,3 +1,8 @@
+/**
+ * @hook useBodyScrollLock
+ * @description
+ * 스크롤 막기
+ */
 const useBodyScrollLock = () => {
     let scrollY = 0;
 
