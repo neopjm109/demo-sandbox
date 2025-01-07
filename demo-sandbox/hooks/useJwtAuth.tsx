@@ -101,6 +101,7 @@ const useJwtAuth = () => {
         setRefreshToken(undefined);
         cookies.remove("x-access-token");
         cookies.remove("x-refresh-token");
+        setStatus(AuthType.WAIT);
         onLink("/");
     }
 
