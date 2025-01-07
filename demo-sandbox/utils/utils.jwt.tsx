@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 const ROLE = "ADMIN";
-const SECRET_KEY = "eff0dc5014184aaa3da921774e4fc1466c76793845a9beb43d36582b5b914520";
+const SECRET_KEY = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
 const ALGORITHM = "HS256";
 const MINUTES = 60;
 const HOURS = 60 * MINUTES;
@@ -9,7 +9,6 @@ const DAY = 24 * HOURS;
 
 const sign = (payload?: object) => {
     let now = Date.now();
-    let iat = Math.floor(now / 1000);
     let accessExpire = Math.floor(now / 1000) + (3 * HOURS);
     let refreshExpire = Math.floor(now / 1000) + (7 * DAY);
 
@@ -17,14 +16,12 @@ const sign = (payload?: object) => {
         {
             ...payload,
             role: ROLE,
-            usage: "access",
-            iat: iat,
-            nbf: iat,
-            exp: accessExpire
+            usage: "access"
         },
         SECRET_KEY,
         {
-            algorithm: ALGORITHM
+            algorithm: ALGORITHM,
+            expiresIn: accessExpire
         }
     );
     
@@ -32,14 +29,12 @@ const sign = (payload?: object) => {
         {
             ...payload,
             role: ROLE,
-            usage: "refresh",
-            iat: iat,
-            nbf: iat,
-            exp: refreshExpire
+            usage: "refresh"
         },
         SECRET_KEY,
         {
-            algorithm: ALGORITHM
+            algorithm: ALGORITHM,
+            expiresIn: accessExpire
         }
     );
 
