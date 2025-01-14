@@ -34,8 +34,8 @@ const JwtProvider = ({ children }: any) => {
         } = data;
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
-        cookies.set("x-access-token", accessToken, { expires: new Date(accessExpire), sameSite: 'lax', secure: true });
-        cookies.set("x-refresh-token", refreshToken, { expires: new Date(refreshExpire), sameSite: 'lax', secure: true });
+        cookies.set("x-access-token", accessToken, { expires: new Date(accessExpire * 1000), sameSite: 'lax', secure: true });
+        cookies.set("x-refresh-token", refreshToken, { expires: new Date(refreshExpire * 1000), sameSite: 'lax', secure: true });
         setStatus(AuthStatus.AUTH);
     }
 
