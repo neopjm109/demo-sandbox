@@ -1,12 +1,11 @@
 'use client';
 
-import ErrorBoundary from "./errorBoundary";
 import { CookiesProvider } from "react-cookie";
+import { JwtProvider } from "./authenticator";
+import ErrorBoundary from "./errorBoundary";
 import Fallback from "./fallback";
-import OfflineObserver from "./offline";
 import { ModalProvider } from "./modal";
-import BaseLayout from "@/components/BaseLayout";
-import Authenticator from "./authenticator";
+import OfflineObserver from "./offline";
 
 const Composer = ({
     children, components
@@ -28,7 +27,7 @@ const Engine = ({
         <ErrorBoundary fallback={ <Fallback/> }>
             <Composer components={[
                 CookiesProvider,
-                Authenticator,
+                JwtProvider,
                 ModalProvider,
                 OfflineObserver
             ]}>
