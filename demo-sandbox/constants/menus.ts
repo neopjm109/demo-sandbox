@@ -31,35 +31,39 @@ const items: MenuItem[] = [
                 type: "group",
                 children: [
                     {
-                        key: "/comp/ui/charts",
-                        label: "Charts (Recharts)"
-                    },
-                    {
                         key: "/comp/ui/modals",
                         label: "Modals"
                     },
                     {
-                        key: "/comp/ui/scrollspy",
-                        label: "Scroll Spy"
+                        key: "/comp/ui/toasts",
+                        label: "Toasts"
                     },
                     {
-                        key: "/comp/ui/slick",
-                        label: "Slick (Slider)"
-                    },
-                    {
-                        key: "/comp/ui/suneditor",
-                        label: "SunEditor"
+                        key: "/comp/ui/form",
+                        label: "Custom Form (Antd)"
                     }
                 ]
             },
             {
-                key: "ui",
-                label: "UI",
+                key: "library",
+                label: "Library",
                 type: "group",
                 children: [
                     {
-                        key: "/comp/cidr",
-                        label: "CIDR 계산기"
+                        key: "/comp/lib/charts",
+                        label: "Charts (Recharts)"
+                    },
+                    {
+                        key: "/comp/lib/scrollspy",
+                        label: "Scroll Spy"
+                    },
+                    {
+                        key: "/comp/lib/slick",
+                        label: "Slick (Slider)"
+                    },
+                    {
+                        key: "/comp/lib/suneditor",
+                        label: "SunEditor"
                     }
                 ]
             }
@@ -129,16 +133,27 @@ const items: MenuItem[] = [
         ]
     },
     {
-        key: "state",
-        label: "State Management",
+        key: "etc",
+        label: "ETC",
+        type: "group",
         children: [
             {
-                key: "/state/zustand",
-                label: "Zustand"
+                key: "state",
+                label: "State Management",
+                children: [
+                    {
+                        key: "/state/zustand",
+                        label: "Zustand"
+                    },
+                    {
+                        key: "/state/reactQuery",
+                        label: "React Query"
+                    }
+                ]
             },
             {
-                key: "/state/reactQuery",
-                label: "React Query"
+                key: "/comp/cidr",
+                label: "CIDR 계산기"
             }
         ]
     }

@@ -8,6 +8,7 @@ import React, { useMemo } from "react";
 import { Cookies } from "react-cookie";
 import SunEditor from "suneditor-react";
 import 'suneditor/dist/css/suneditor.min.css';
+import '../app/base.form.css';
 
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
