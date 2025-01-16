@@ -60,11 +60,11 @@ enum ClosePosition {
 }
 
 /**
- * @class ModalObject
+ * @class ModalProps
  * @description
  * Modal 정보 인터페이스
  */
-class ModalObject {
+class ModalProps {
     id?: string;
     title?: string;
     shape?: ModalShape | ModalShape.DIALOG;
@@ -93,7 +93,7 @@ class ModalObject {
     onClose? = (response?: any) => {};
 }
 
-type ModalStatesProps = {
+type ModalStatesObject = {
     id: string
     modal: React.ReactElement
 }
@@ -104,7 +104,7 @@ type ModalStatesProps = {
  * 모달 관리 인터페이스
  */
 class ModalStates {
-    modals : ModalStatesProps[] = [];
+    modals : ModalStatesObject[] = [];
     show = (data: React.ReactElement) : string => "";
     hide = (id: string) => {};
     hideAll = () => {};
@@ -127,25 +127,24 @@ const Animate = (start: any, end: any) => {
     return option;
 }
 
-const reverseAnimate = (object?: ModalObject) => {
-    const { id, position, width, height }: any = object;
-    let elem: any = document.getElementById(id);    
-    console.log("!", id, elem)
+const reverseAnimate = (props?: ModalProps) => {
+    const { id, position, width, height }: any = props;
+    let elem: any = document.getElementById(id);
     switch (position) {
         case ModalPosition.LEFT:
-            elem.style.marginLeft = -(width ?? 320) + "px";
+            elem.style.left = -width + "px";
             break;
         case ModalPosition.RIGHT: 
-            elem.style.marginRight = -(width ?? 320) + "px";
+            elem.style.right = -width + "px";
             break;
         case ModalPosition.TOP: 
-            elem.style.marginTop = -(height ?? 200) + "px";
+            elem.style.top = -height + "px";
             break;
-        case ModalPosition.BOTTOM: 
-            elem.style.marginBottom = -(height ?? 200) + "px";
+        case ModalPosition.BOTTOM: ``
+            elem.style.bottom = -height + "px";
             break;
         default:
-            elem.style.marginTop = (-(height ?? 320) / 10) + "px";
+            elem.style.top = (-(height + 32) / 10) + "px";
             elem.style.opacity = 0;
             break;
     }
@@ -154,15 +153,15 @@ const reverseAnimate = (object?: ModalObject) => {
 const isInClose = (pos?: ClosePosition) => (pos === ClosePosition.IN_LEFT) || (pos === ClosePosition.IN_RIGHT)
 const isOutClose = (pos?: ClosePosition) => (pos === ClosePosition.OUT_LEFT) || (pos === ClosePosition.OUT_RIGHT)
 
-const getModalPosition = (object?: ModalObject) => {
-    if (object?.shape === ModalShape.FULLSCREEN) {
+const getModalPosition = (props?: ModalProps) => {
+    if (props?.shape === ModalShape.FULLSCREEN) {
         return {
             justifyContent: 'center',
             alignItems: 'center'
         }
     }
-    let position = object?.position ?? ModalPosition.CENTER;
-    if (object?.shape === ModalShape.SHEET && position === ModalPosition.CENTER) {
+    let position = props?.position ?? ModalPosition.CENTER;
+    if (props?.shape === ModalShape.SHEET && position === ModalPosition.CENTER) {
         position = ModalPosition.BOTTOM
     }
     switch (position) {
@@ -194,51 +193,51 @@ const getModalPosition = (object?: ModalObject) => {
     }
 }
 
-const getPositionOffset = (object?: ModalObject) => {
-    const { position, offset, width, height, animation }: any = object;
+const getPositionOffset = (props?: ModalProps) => {
+    const { position, offset, width, height, animation }: any = props;
     switch (position) {
-        case ModalPosition.LEFT: return { marginLeft: animation ? Animate(-(width ?? 320), offset) : offset }
-        case ModalPosition.RIGHT: return { marginRight: animation ? Animate(-(width ?? 320), offset) : offset }
-        case ModalPosition.TOP: return { marginTop: animation ? Animate(-(height ?? 200), offset) : offset }
-        case ModalPosition.BOTTOM: return { marginBottom: animation ? Animate(-(height ?? 200), offset) : offset }
-        default: return { marginTop: animation ? Animate(-(height ?? 200) / 10, offset) : offset, opacity: animation ? Animate(0, 1) : 1 }
+        case ModalPosition.LEFT: return { marginLeft: animation ? Animate(-width, offset) : offset }
+        case ModalPosition.RIGHT: return { marginRight: animation ? Animate(-width, offset) : offset }
+        case ModalPosition.TOP: return { marginTop: animation ? Animate(-height, offset) : offset }
+        case ModalPosition.BOTTOM: return { marginBottom: animation ? Animate(-height, offset) : offset }
+        default: return { marginTop: animation ? Animate(-(height + 32) / 10, offset) : offset, opacity: animation ? Animate(0, 1) : 1 }
     }
 }
 
-const getModalSize = (object?: ModalObject) => {
-    switch (object?.shape) {
+const getModalSize = (props?: ModalProps) => {
+    switch (props?.shape) {
         case ModalShape.FULLSCREEN:
             return {
                 width: '100%',
                 height: '100%'
             }
         case ModalShape.SHEET:
-            switch(object?.position) {
+            switch(props?.position) {
                 case ModalPosition.LEFT:
                 case ModalPosition.RIGHT:
                     return {
-                        width: object?.width,
+                        width: props?.width,
                         height: '100%'
                     }
                 case ModalPosition.TOP:
                 default:
                     return {
                         width: '100%',
-                        height: object?.height
+                        height: props?.height
                     }
             }
         default:
             return {
-                width: object?.width,
-                height: object?.height,
+                width: props?.width,
+                height: props?.height,
             }
     }
 }
 
-const Modal = (object?: ModalObject) => {
+const Modal = (props?: ModalProps) => {
     return (
-        <ModalWrap object={ object }>
-            <ModalContainer object={{...object}}/>
+        <ModalWrap props={ props }>
+            <ModalContainer props={{...props}}/>
         </ModalWrap>
     );
 }
@@ -266,7 +265,7 @@ const CloseButton = ({onClick}: {onClick?: Function}) => {
     )
 }
 
-const ModalWrap = ({ object, children }: { object: ModalObject | undefined, children: React.ReactElement }) => {
+const ModalWrap = ({ props, children }: { props: ModalProps | undefined, children: React.ReactElement }) => {
     return (
         <div
             style={{
@@ -276,68 +275,68 @@ const ModalWrap = ({ object, children }: { object: ModalObject | undefined, chil
                 left: 0,
                 width: '100vw',
                 height: '100vh',
-                ...getModalPosition(object)
+                ...getModalPosition(props)
             }}
         >
             <div
-                style={{ position: 'absolute', left:0, right:0, top:0, bottom:0, background: 'rgba(0,0,0,0.25)', transition: 'all 0.3s ease' }}
+                style={{ position: 'absolute', left:0, right:0, top:0, bottom:0, background: 'rgba(0,0,0,0.25)' }}
                 onClick={ () => {
-                    if (object?.outsideClickClose) object.onClose?.();
-                    else object?.onOutsideClick?.();
+                    if (props?.outsideClickClose) props.onClose?.();
+                    else props?.onOutsideClick?.();
                 }}/>
             { children }
         </div>
     );
 }
 
-const ModalContainer = ({ object }: { object: ModalObject | undefined }) => {
+const ModalContainer = ({ props }: { props: ModalProps | undefined }) => {
     useHistoryBackLock();
     return (
-        <div id={object?.id} style={{
+        <div id={props?.id} style={{
             display: 'flex',
             flexDirection: 'column',
-            zIndex: object?.zIndex ?? 1000,
+            zIndex: props?.zIndex ?? 1000,
             backgroundColor: '#fff',
             boxShadow: '0px 1px 8px 0px #797979',
-            transition: 'all 0.3s ease',
+            transition: 'all 0.5s ease',
             minWidth: 280,
             minHeight: 200,
-            ...getModalSize(object),
-            ...getPositionOffset(object)
+            ...getModalSize(props),
+            ...getPositionOffset(props)
         }}>
-            <ModalHeader object={object}/>
-            <ModalContents object={object}/>
-            <ModalFooter object={object}/>
+            <ModalHeader props={props}/>
+            <ModalContents props={props}/>
+            <ModalFooter props={props}/>
         </div>
     );
 }
 
-const ModalHeader = ({ object }: { object?: ModalObject }) => {
+const ModalHeader = ({ props }: { props?: ModalProps }) => {
     return (
         <>
         {   
-            !object?.hideHeader &&
+            !props?.hideHeader &&
                 <div style={{ display: 'flex', alignItems: 'center', height: 32, padding: '8px 12px' }}>
-                    <div style={{ flex: 1, fontSize: 18, fontWeight: 700 }}>{ object?.title }</div>
-                    <CloseButton onClick={ () => object?.onClose?.()}/>
+                    <div style={{ flex: 1, fontSize: 18, fontWeight: 700 }}>{ props?.title }</div>
+                    <CloseButton onClick={ () => props?.onClose?.()}/>
                 </div>
         }
         </>
     );
 }
 
-const ModalContents = ({ object }: { object?: ModalObject }) => {
-    return <div style={{ flex:1, fontSize: 14, color: '#333', padding:`${object?.hideHeader ? '8': '4'}px 12px`, overflow: 'auto' }}>{object?.children}</div>;
+const ModalContents = ({ props }: { props?: ModalProps }) => {
+    return <div style={{ flex:1, fontSize: 14, color: '#333', padding:`${props?.hideHeader ? '8': '4'}px 12px`, overflow: 'auto' }}>{props?.children}</div>;
 }
 
-const ModalFooter = ({ object }: { object?: ModalObject }) => {
+const ModalFooter = ({ props }: { props?: ModalProps }) => {
     return (
         <>
             {
-                (!object?.hideFooter && (object?.success || object?.cancel)) &&
+                (!props?.hideFooter && (props?.success || props?.cancel)) &&
                     <div style={{ display: 'flex', alignItems: 'center', height: 36, padding: '12px 12px', justifyContent: 'end', gap: 8 }}>
                         {
-                            object?.cancel &&
+                            props?.cancel &&
                                 <button
                                     style={{
                                         display: 'flex',
@@ -352,11 +351,11 @@ const ModalFooter = ({ object }: { object?: ModalObject }) => {
                                         color: '#333',
                                         cursor: 'pointer'
                                     }}
-                                    onClick={ () => object?.onCancel?.() }
-                                >{ object?.cancel }</button>
+                                    onClick={ () => props?.onCancel?.() }
+                                >{ props?.cancel }</button>
                         }
                         {
-                            object?.success &&
+                            props?.success &&
                                 <button
                                     style={{
                                         display: 'flex',
@@ -371,8 +370,8 @@ const ModalFooter = ({ object }: { object?: ModalObject }) => {
                                         color: '#fff',
                                         cursor: 'pointer'
                                     }}
-                                    onClick={ () => object?.onSuccess?.() }
-                                >{ object?.success }</button>
+                                    onClick={ () => props?.onSuccess?.() }
+                                >{ props?.success }</button>
                         }
                     </div>
             }
@@ -380,30 +379,30 @@ const ModalFooter = ({ object }: { object?: ModalObject }) => {
     );
 }
 
-const Alert = (object?: ModalObject) => {
+const Alert = (props?: ModalProps) => {
     return (
-        <ModalWrap object={ object }>
-            <ModalContainer object={{
-                ...object,
+        <ModalWrap props={ props }>
+            <ModalContainer props={{
+                ...props,
                 shape: ModalShape.DIALOG,
                 hideHeader: false,
                 hideFooter: false,
-                success: object?.success ?? "확인"
+                success: props?.success ?? "확인"
             }}/>
         </ModalWrap>
     );
 }
 
-const Confirm = (object?: ModalObject) => {
+const Confirm = (props?: ModalProps) => {
     return (
-        <ModalWrap object={ object }>
-            <ModalContainer object={{
-                ...object,
+        <ModalWrap props={ props }>
+            <ModalContainer props={{
+                ...props,
                 shape: ModalShape.DIALOG,
                 hideHeader: false,
                 hideFooter: false,
-                success: object?.success ?? "확인",
-                cancel: object?.cancel ?? "취소"
+                success: props?.success ?? "확인",
+                cancel: props?.cancel ?? "취소"
             }}/>
         </ModalWrap>
     );
@@ -414,82 +413,54 @@ const Confirm = (object?: ModalObject) => {
  * @description
  * useContext를 이용한 Modal 관리
  */
-function ModalProvider({
+const ModalProvider = ({
     children,
 }: {
     children?: React.ReactElement
-}) {
-    const [modals, setModals] = React.useState<ModalStatesProps[]>([]);
+}) => {
+    const [modals, setModals] = React.useState<ModalStatesObject[]>([]);
     const generate = (id: string, element: React.ReactElement) => {
         const { type } : any = element;
+        const props = {
+            ...element.props,
+            id,
+            width: element.props?.width ?? 320,
+            height: element.props?.height ?? 200,
+            zIndex: element.props?.zIndex ?? (1000 + modals.length),
+        }
+        const onClose = () => {
+            if (props.animation) {
+                reverseAnimate(props);
+                setTimeout(() => {
+                    props.onClose?.();
+                    hide(id);
+                }, 500)
+            }
+            else {
+                props.onClose?.();
+                hide(id);
+            }
+        }
         switch (type.name) {
             case "Alert":
-                return <Alert
-                    {...element.props}
-                    id={ id }
-                    zIndex={ element.props?.zIndex ?? (1000 + modals.length) }
-                    onClose={() => {
-                        if (element.props.animation) {
-                            reverseAnimate({id, ...element.props});
-                            setTimeout(() => {
-                                element.props.onClose?.();
-                                hide(id);
-                            }, 200)
-                        }
-                        else {
-                            element.props.onClose?.();
-                            hide(id);
-                        }
-                    }}/>
+                return <Alert {...props} onClose={onClose}/>
             case "Confirm":
-                return <Confirm
-                    {...element.props}
-                    id={ id }
-                    zIndex={ element.props?.zIndex ?? (1000 + modals.length) }
-                    onClose={() => {
-                        if (element.props.animation) {
-                            reverseAnimate({id, ...element.props});
-                            setTimeout(() => {
-                                element.props.onClose?.();
-                                hide(id);
-                            }, 200)
-                        }
-                        else {
-                            element.props.onClose?.();
-                            hide(id);
-                        }
-                    }}/>
+                return <Confirm {...props} onClose={onClose}/>
             default:
-                return <Modal
-                    {...element.props}
-                    id={ id }
-                    zIndex={ element.props?.zIndex ?? (1000 + modals.length) }
-                    onClose={() => {
-                        if (element.props.animation) {
-                            reverseAnimate({id, ...element.props});
-                            setTimeout(() => {
-                                element.props.onClose?.();
-                                hide(id);
-                            }, 200)
-                        }
-                        else {
-                            element.props.onClose?.();
-                            hide(id);
-                        }
-                    }}/>
+                return <Modal {...props} onClose={onClose}/>
         }
     }
 
     const show = (element: React.ReactElement) : string => {
         let id = `md_${new Date().getTime().toString()}${(Math.random() * 1000).toFixed(0)}`;
         const modal = generate(id, element);
-        setModals((states: ModalStatesProps[]) => [ ...states, { id, modal } ]);
+        setModals((states: ModalStatesObject[]) => [ ...states, { id, modal } ]);
         return id;
     }
 
     const hide = (id?: string) => {
         if (id) {
-            setModals((states: ModalStatesProps[]) => {
+            setModals((states: ModalStatesObject[]) => {
                 let idx = states.findIndex((state) => state.id === id);
                 if (idx > -1) states.splice(idx, 1);
                 return [ ...states ];
