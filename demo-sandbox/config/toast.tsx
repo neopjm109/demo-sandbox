@@ -241,7 +241,8 @@ const toastContainerStyle = {
     padding: "0px 16px",
     position: 'fixed' as "fixed",
     overflow: 'hidden',
-    transition: 'all 0.5s ease'
+    transition: 'all 0.5s ease',
+    zIndex: 9000
 }
 
 /**
@@ -266,7 +267,7 @@ const ToastProvider = ({
         const toast = <Toast {...element.props}
             id={ id }
             position={ element.props.position ?? ToastPosition.TOP }
-            zIndex={ element.props?.zIndex ?? (9999 - toasts.length) }
+            zIndex={ 9999 - toasts.length }
             onClose={ () => {
                 reverseAnimateStep1({id, ...element.props});
                 let t1 = setTimeout(() => {

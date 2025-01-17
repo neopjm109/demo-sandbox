@@ -1,7 +1,7 @@
 'use client'
 
 import useHistoryBackLock from "@/hooks/useHistoryBackLock";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 
 /**
  * @enum ModalShape
@@ -64,38 +64,38 @@ enum ClosePosition {
  * @description
  * Modal 정보 인터페이스
  */
-class ModalProps {
-    id?: string;
-    title?: string;
-    shape?: ModalShape | ModalShape.DIALOG;
-    position?: ModalPosition | ModalPosition.CENTER;
-    positionOffset?: number;
-    animation?: boolean;
-    direction?: ModalDirection | ModalDirection.FADE;
-    closePosition?: ClosePosition | ClosePosition.IN_RIGHT;
-    children?: React.ReactElement;
-    hideHeader?: boolean;
-    hideFooter?: boolean;
-    outsideClickClose?: boolean;
-    width?: number;
-    height?: number;
-    minWidth?: number;
-    minHeight?: number;
-    maxWidth?: number;
-    maxHeight?: number;
-    zIndex?: number;
-    onOutsideClick? = () => {};
-    success?: string;
-    onSuccess? = (response?: any) => {};
-    cancel?: string;
-    onCancel? = (response?: any) => {};
-    close?: string;
-    onClose? = (response?: any) => {};
+type ModalProps = {
+    id?: string,
+    title?: string,
+    shape?: ModalShape | ModalShape.DIALOG,
+    position?: ModalPosition | ModalPosition.CENTER,
+    positionOffset?: number,
+    animation?: boolean,
+    direction?: ModalDirection | ModalDirection.FADE,
+    closePosition?: ClosePosition | ClosePosition.IN_RIGHT,
+    children?: React.ReactNode,
+    hideHeader?: boolean,
+    hideFooter?: boolean,
+    outsideClickClose?: boolean,
+    width?: number,
+    height?: number,
+    minWidth?: number,
+    minHeight?: number,
+    maxWidth?: number,
+    maxHeight?: number,
+    zIndex?: number,
+    onOutsideClick?: () => void,
+    success?: string,
+    onSuccess?: (response?: any) => void,
+    cancel?: string,
+    onCancel?: (response?: any) => void,
+    close?: string,
+    onClose?: (response?: any) => void,
 }
 
 type ModalStatesObject = {
-    id: string
-    modal: React.ReactElement
+    props?: any,
+    element?: React.ReactElement
 }
 
 /**
@@ -105,8 +105,8 @@ type ModalStatesObject = {
  */
 class ModalStates {
     modals : ModalStatesObject[] = [];
-    show = (data: React.ReactElement) : string => "";
-    hide = (id: string) => {};
+    show = (props: ModalProps) => {};
+    hide = (id?: string) => {};
     hideAll = () => {};
 }
 
@@ -234,10 +234,34 @@ const getModalSize = (props?: ModalProps) => {
     }
 }
 
-const Modal = (props?: ModalProps) => {
+const Modal = (props:  ModalProps) => {
+    const { hide, modals } = useModalContext();
+    const modalProps: ModalProps = useMemo(() => {
+        const object: ModalProps = {
+            ...props,
+            width: props?.width ?? 320,
+            height: props?.height ?? 200,
+            zIndex: 1000 + modals.length,
+        }
+        const onClose = () => {
+            if (props?.animation) {
+                reverseAnimate(object);
+                setTimeout(() => {
+                    props?.onClose?.();
+                    hide(props.id);
+                }, 500)
+            }
+            else {
+                props?.onClose?.();
+                hide(props.id);
+            }
+        }
+        return { ...object, onClose };
+    }, [props]);
+
     return (
-        <ModalWrap props={ props }>
-            <ModalContainer props={{...props}}/>
+        <ModalWrap props={ modalProps }>
+            <ModalContainer props={ modalProps }/>
         </ModalWrap>
     );
 }
@@ -251,7 +275,8 @@ const CloseButton = ({onClick}: {onClick?: Function}) => {
                 alignItems: 'center',
                 background: '#fff',
                 borderWidth: 0,
-                height: 32,
+                height: 24,
+                width: 24,
                 fontSize: 32,
                 fontWeight: 100,
                 padding: 0,
@@ -259,9 +284,7 @@ const CloseButton = ({onClick}: {onClick?: Function}) => {
                 cursor: 'pointer'
             }}
             onClick={ () => onClick?.() }
-        >
-            &times;
-        </button>
+        >&times;</button>
     )
 }
 
@@ -279,6 +302,7 @@ const ModalWrap = ({ props, children }: { props: ModalProps | undefined, childre
             }}
         >
             <div
+                id={ `dim_${props?.id}` }
                 style={{ position: 'absolute', left:0, right:0, top:0, bottom:0, background: 'rgba(0,0,0,0.25)' }}
                 onClick={ () => {
                     if (props?.outsideClickClose) props.onClose?.();
@@ -316,7 +340,7 @@ const ModalHeader = ({ props }: { props?: ModalProps }) => {
         <>
         {   
             !props?.hideHeader &&
-                <div style={{ display: 'flex', alignItems: 'center', height: 32, padding: '8px 12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', height: 40, padding: '8px 12px' }}>
                     <div style={{ flex: 1, fontSize: 18, fontWeight: 700 }}>{ props?.title }</div>
                     <CloseButton onClick={ () => props?.onClose?.()}/>
                 </div>
@@ -381,30 +405,22 @@ const ModalFooter = ({ props }: { props?: ModalProps }) => {
 
 const Alert = (props?: ModalProps) => {
     return (
-        <ModalWrap props={ props }>
-            <ModalContainer props={{
-                ...props,
-                shape: ModalShape.DIALOG,
-                hideHeader: false,
-                hideFooter: false,
-                success: props?.success ?? "확인"
-            }}/>
-        </ModalWrap>
+        <Modal {...props}
+            shape={ModalShape.DIALOG}
+            hideHeader={false}
+            hideFooter={false}
+            success={props?.success ?? "확인"}/>
     );
 }
 
 const Confirm = (props?: ModalProps) => {
     return (
-        <ModalWrap props={ props }>
-            <ModalContainer props={{
-                ...props,
-                shape: ModalShape.DIALOG,
-                hideHeader: false,
-                hideFooter: false,
-                success: props?.success ?? "확인",
-                cancel: props?.cancel ?? "취소"
-            }}/>
-        </ModalWrap>
+        <Modal {...props}
+            shape={ModalShape.DIALOG}
+            hideHeader={false}
+            hideFooter={false}
+            success={props?.success ?? "확인"}
+            cancel={props?.cancel ?? "취소"}/>
     );
 }
 
@@ -419,49 +435,32 @@ const ModalProvider = ({
     children?: React.ReactElement
 }) => {
     const [modals, setModals] = React.useState<ModalStatesObject[]>([]);
-    const generate = (id: string, element: React.ReactElement) => {
-        const { type } : any = element;
-        const props = {
-            ...element.props,
-            id,
-            width: element.props?.width ?? 320,
-            height: element.props?.height ?? 200,
-            zIndex: element.props?.zIndex ?? (1000 + modals.length),
-        }
-        const onClose = () => {
-            if (props.animation) {
-                reverseAnimate(props);
-                setTimeout(() => {
-                    props.onClose?.();
-                    hide(id);
-                }, 500)
-            }
-            else {
-                props.onClose?.();
-                hide(id);
-            }
-        }
-        switch (type.name) {
-            case "Alert":
-                return <Alert {...props} onClose={onClose}/>
-            case "Confirm":
-                return <Confirm {...props} onClose={onClose}/>
-            default:
-                return <Modal {...props} onClose={onClose}/>
-        }
+    useEffect(() => {
+        console.log(modals);
+    }, [modals])
+
+    const show = (props: ModalProps) => {
+        const id = `md_${new Date().getTime().toString()}${(Math.random() * 1000).toFixed(0)}`;
+        const element = <Modal {...props} id={id}/>
+        setModals((states: ModalStatesObject[]) => [ ...states, { props: { ...props, id }, element } ]);
     }
 
-    const show = (element: React.ReactElement) : string => {
-        let id = `md_${new Date().getTime().toString()}${(Math.random() * 1000).toFixed(0)}`;
-        const modal = generate(id, element);
-        setModals((states: ModalStatesObject[]) => [ ...states, { id, modal } ]);
-        return id;
+    const showAlert = (props: ModalProps) => {
+        const id = `md_${new Date().getTime().toString()}${(Math.random() * 1000).toFixed(0)}`;
+        const element = <Alert {...props} id={id}/>
+        setModals((states: ModalStatesObject[]) => [ ...states, { props: { ...props, id }, element } ]);
+    }
+
+    const showConfirm = (props: ModalProps) => {
+        const id = `md_${new Date().getTime().toString()}${(Math.random() * 1000).toFixed(0)}`;
+        const element = <Confirm {...props} id={id}/>
+        setModals((states: ModalStatesObject[]) => [ ...states, { props: { ...props, id }, element } ]);
     }
 
     const hide = (id?: string) => {
         if (id) {
             setModals((states: ModalStatesObject[]) => {
-                let idx = states.findIndex((state) => state.id === id);
+                let idx = states.findIndex((state) => state.props.id === id);
                 if (idx > -1) states.splice(idx, 1);
                 return [ ...states ];
             });
@@ -471,7 +470,7 @@ const ModalProvider = ({
     const hideAll = () => setModals([]);
 
     const modalValue = React.useMemo<ModalStates>(() => {
-        return { modals, show, hide, hideAll }
+        return { modals, show, showAlert, showConfirm, hide, hideAll }
     }, [modals]);
 
     return (
@@ -479,10 +478,10 @@ const ModalProvider = ({
             {children}
             {
                 modals.length > 0 &&
-                    modals.map((modal) => <React.Fragment key={modal.id}>{ modal.modal }</React.Fragment>)
+                    modals.map((modal) => <React.Fragment key={modal.props.id}>{ modal.element }</React.Fragment>)
             }
         </ModalContext.Provider>
     )
 }
 
-export { ModalContext, ModalProvider, useModalContext, Modal, ModalShape, ModalPosition, Alert, Confirm };
+export { ModalContext, ModalProvider, useModalContext, ModalShape, ModalPosition, Alert, Confirm };
