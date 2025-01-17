@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { decrypt, encrypt } from "@/utils/utils.aes256";
 import { Button, Input, Typography, Switch } from "antd";
 import { useEffect, useState } from "react";
@@ -23,7 +24,7 @@ export default function Aes256() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px'}}>
-      <Title level={2} style={{ marginTop: 0 }}>AES256</Title>
+      <PageTitle title={ "AES256" } description={ "AES256 암호화 예제 페이지입니다." }/>
       <div style={{ display: 'flex', gap: 16 }}>
         <div style={{ width: 300 }}>
           <Title level={5}style={{ marginTop: 0 }}>Key</Title>

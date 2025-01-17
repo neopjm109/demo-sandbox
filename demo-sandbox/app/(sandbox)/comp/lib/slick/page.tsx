@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { Typography } from "antd";
 import Slider from "react-slick";
 
@@ -18,7 +19,7 @@ const settings = {
 export default function Slick() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Title level={2} style={{ marginTop: 0 }}>Slick</Title>
+      <PageTitle title={ "Slick" } description={ "react-slick 라이브러리를 이용한 Carousel 페이지입니다." }/>
       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
         <div style={{ width: '100%' }}>
           <Slider { ...settings }>

@@ -8,7 +8,7 @@ const { Title } = Typography;
 export default function Home() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <PageTitle title={ "jmpark.dev FE SANDBOX" } description={ "이 페이지는 FE Sandbox 입니다." }/>
+      <PageTitle title={ "Login" } description={ "JWT 토큰을 이용한 로그인 기능을 구현한 페이지입니다." }/>
       <div>
         <div>
           <ul>

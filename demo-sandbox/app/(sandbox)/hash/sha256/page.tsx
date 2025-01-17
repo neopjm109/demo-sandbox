@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { Button, Input, Typography } from "antd";
 import sha256 from "crypto-js/sha256";
 import { useState } from "react";
@@ -13,7 +14,7 @@ export default function Sha256() {
   const [ result, setResult ] = useState("");
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Title level={2} style={{ marginTop: 0 }}>SHA256</Title>
+      <PageTitle title={ "SHA256" } description={ "SHA256 해시 예제 페이지입니다." }/>
       <div style={{ display: 'flex', gap: 16, alignItems: 'start' }}>
         <div style={{ flexGrow: 1}}>
           <Title level={5} style={{ marginTop: 0 }}>Input</Title>

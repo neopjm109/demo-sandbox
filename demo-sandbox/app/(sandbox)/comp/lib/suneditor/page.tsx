@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { Typography } from "antd";
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css';
@@ -8,7 +9,7 @@ const { Title } = Typography;
 export default function SunEditorPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Title level={2} style={{ marginTop: 0 }}>SunEditor</Title>
+      <PageTitle title={ "SunEditor" } description={ "SunEditor 라이브러리를 이용한 WYSIWYG 페이지입니다." }/>
       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
         <SunEditor
           height="300px"

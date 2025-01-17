@@ -1,13 +1,14 @@
 "use client";
 import ScrollSpy from "react-scrollspy-navigation";
 import { Typography } from "antd";
+import PageTitle from "@/components/PageTitle";
 
 const { Title } = Typography;
 
 export default function ScrollSpyPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px'}}>
-      <Title level={2} style={{ marginTop: 0 }}>Scroll Spy</Title>
+      <PageTitle title={ "Scroll Spy" } description={ "react-scrollspy-navigation 라이브러리를 이용한 페이지입니다." }/>
       <div>
         <ScrollSpy activeClass="nav-active">
           <nav style={{ position: 'sticky', top: 10}}>

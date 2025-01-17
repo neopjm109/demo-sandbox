@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { Input, Typography, Upload } from "antd";
 import CryptoJS from "crypto-js";
 import sha256 from "crypto-js/sha256";
@@ -14,7 +15,7 @@ export default function Sha256File() {
   const [ result, setResult ] = useState("");
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Title level={2} style={{ marginTop: 0 }}>SHA256 File</Title>
+      <PageTitle title={ "SHA256 File" } description={ "SHA256 File 암호화 예제 페이지입니다." }/>
       <div style={{ display: 'flex', gap: 16, alignItems: 'start' }}>
         <div style={{ flexGrow: 1}}>
           <Title level={5} style={{ marginTop: 0 }}>Input</Title>

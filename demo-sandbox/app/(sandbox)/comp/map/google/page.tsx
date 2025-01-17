@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { Typography } from "antd";
 
 const { Title } = Typography;
@@ -6,7 +7,7 @@ const { Title } = Typography;
 export default function GoogleMapPage() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px'}}>
-      <Title level={2} style={{ marginTop: 0 }}>Google Map</Title>
+      <PageTitle title={ "Google MAP" } description={ "Google 지도 API를 연동한 페이지입니다." }/>
       <div>
         
       </div>

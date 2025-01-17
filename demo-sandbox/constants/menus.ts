@@ -70,6 +70,37 @@ const items: MenuItem[] = [
         ]
     },
     {
+        key: "hook",
+        label: "Custom Hook",
+        type: "group",
+        children: [
+            {
+                key: "/hook/link",
+                label: "useLink"
+            },
+            {
+                key: "/hook/script",
+                label: "useScript"
+            },
+            {
+                key: "/hook/interval",
+                label: "useInterval"
+            },
+            {
+                key: "/hook/os",
+                label: "useDeviceOs"
+            },
+            {
+                key: "/hook/scrollLock",
+                label: "useBodyScrollLock"
+            },
+            {
+                key: "/hook/backLock",
+                label: "useHistoryBackLock"
+            }
+        ]
+    },
+    {
         key: 'hash-encrypt',
         label: "Hash/Encryption",
         children: [

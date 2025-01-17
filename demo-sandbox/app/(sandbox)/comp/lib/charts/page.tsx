@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { Flex, Typography } from "antd";
 import { LineChart, Line, AreaChart, Area, PieChart, Pie, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
 
@@ -67,7 +68,12 @@ const colorData = [
 export default function Charts() {
 return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '4px'}}>
-      <Title level={2} style={{ marginTop: 0 }}>Charts</Title>
+      <PageTitle title={ "Charts" } description={ "Recharts 라이브러리를 이용한 페이지입니다." }/>
+      <div>
+        <ul>
+          <li>Library : recharts</li>
+        </ul>
+      </div>
       <Flex vertical gap="small">
         <h2>Line Chart</h2>
         <LineChart width={800} height={400} data={monoData}>

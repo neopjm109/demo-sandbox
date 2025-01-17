@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Radio, Select, Switch, Typography, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
@@ -46,7 +47,7 @@ export default function CustomForm() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <Title level={2} style={{ marginTop: 0 }}>Form</Title>
+      <PageTitle title={ "Form" } description={ "BaseForm을 이용한 Form 생성 예제 페이지입니다." }/>
       <Form form={form} className="base-form" initialValues={{ formName: "TEST" }} onFinish={ save }>
         <Form.Item label="이름" name="formName" required>
           <Input/>

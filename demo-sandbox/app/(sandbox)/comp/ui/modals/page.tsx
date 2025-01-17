@@ -1,4 +1,5 @@
 "use client";
+import PageTitle from "@/components/PageTitle";
 import { useModalContext } from "@/config/modal";
 import { Toast, useToastContext } from "@/config/toast";
 import { Button, Typography } from "antd";
@@ -23,7 +24,7 @@ export default function Modals() {
   const { show : showToast} = useToastContext();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-      <Title level={2} style={{ marginTop: 0 }}>Modals</Title>
+      <PageTitle title={ "Modals" } description={ "Modal Context API 이용한 Modal 생성 예제 페이지입니다." }/>
       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
         <Button onClick={() => {
           show({
