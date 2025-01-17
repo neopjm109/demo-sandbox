@@ -57,9 +57,9 @@ type ToastStatesObject = {
  */
 class ToastStates {
     toasts : ToastStatesObject[] = [];
-    show = (data: React.ReactElement) : string => "";
-    hide = (id: string) => {};
-    hideAll = () => {};
+    showToast = (props?: ToastProps) : string => "";
+    hideToast = (id: string) => {};
+    hideToastAll = () => {};
 }
 
 const ToastContext = React.createContext<ToastStates>(new ToastStates());
@@ -235,10 +235,20 @@ const Toast = (props?: ToastProps) => {
     );
 }
 
-const toastContainerStyle = {
+const toastTopContainerStyle = {
     display: 'flex',
     flexDirection: 'column' as "column",
-    padding: "0px 16px",
+    padding: '0px 16px 16px',
+    position: 'fixed' as "fixed",
+    overflow: 'hidden',
+    transition: 'all 0.5s ease',
+    zIndex: 9000
+}
+
+const toastBottomContainerStyle = {
+    display: 'flex',
+    flexDirection: 'column' as "column",
+    padding: '16px 16px 0px',
     position: 'fixed' as "fixed",
     overflow: 'hidden',
     transition: 'all 0.5s ease',
@@ -262,19 +272,19 @@ const ToastProvider = ({
     const bottomToasts = useMemo(() => toasts.filter((t) => t.toast.props.position === ToastPosition.BOTTOM).reverse(), [toasts]);
     const bottomLeftToasts = useMemo(() => toasts.filter((t) => t.toast.props.position === ToastPosition.BOTTOM_LEFT).reverse(), [toasts]);
     const bottomRightToasts = useMemo(() => toasts.filter((t) => t.toast.props.position === ToastPosition.BOTTOM_RIGHT).reverse(), [toasts]);
-    const show = (element: React.ReactElement) : string => {
+    const showToast = (props?: ToastProps) : string => {
         let id = `t_${new Date().getTime().toString()}${(Math.random() * 1000).toFixed(0)}`;
-        const toast = <Toast {...element.props}
+        const toast = <Toast {...props}
             id={ id }
-            position={ element.props.position ?? ToastPosition.TOP }
+            position={ props?.position ?? ToastPosition.TOP }
             zIndex={ 9999 - toasts.length }
             onClose={ () => {
-                reverseAnimateStep1({id, ...element.props});
+                reverseAnimateStep1({id, ...props});
                 let t1 = setTimeout(() => {
-                    reverseAnimateStep2({id, ...element.props});
+                    reverseAnimateStep2({id, ...props});
                     let t2 = setTimeout(() => {
-                        element.props.onClose?.();
-                        hide(id);
+                        props?.onClose?.();
+                        hideToast(id);
                         clearTimeout(t2);
                         clearTimeout(t1);
                     }, 500)
@@ -284,7 +294,7 @@ const ToastProvider = ({
         return id;
     }
 
-    const hide = (id?: string) => {
+    const hideToast = (id?: string) => {
         if (id) {
             setToasts((states: ToastStatesObject[]) => {
                 let idx = states.findIndex((state) => state.id === id);
@@ -294,10 +304,10 @@ const ToastProvider = ({
         }
     }
     
-    const hideAll = () => setToasts([]);
+    const hideToastAll = () => setToasts([]);
 
     const modalValue = React.useMemo<ToastStates>(() => {
-        return { toasts, show, hide, hideAll }
+        return { toasts, showToast, hideToast, hideToastAll }
     }, [toasts]);
 
     return (
@@ -305,37 +315,37 @@ const ToastProvider = ({
             {children}
             {
                 topToasts.length > 0 &&
-                    <div style={{ ...toastContainerStyle, top:0, left: '50%', width: 280, transform: 'translate(-50%, 0%)' }}>
+                    <div style={{ ...toastTopContainerStyle, top:0, left: '50%', width: 280, transform: 'translate(-50%, 0%)' }}>
                         { topToasts.map((toast) => <React.Fragment key={toast.id}>{ toast.toast }</React.Fragment>) }
                     </div>
             }
             {
                 topLeftToasts.length > 0 &&
-                    <div style={{ ...toastContainerStyle, top:0, left: 0, width: 280 }}>
+                    <div style={{ ...toastTopContainerStyle, top:0, left: 0, width: 280 }}>
                         { topLeftToasts.map((toast) => <React.Fragment key={toast.id}>{ toast.toast }</React.Fragment>) }
                     </div>
             }
             {
                 topRightToasts.length > 0 &&
-                    <div style={{ ...toastContainerStyle, top:0, right: 0, width: 280 }}>
+                    <div style={{ ...toastTopContainerStyle, top:0, right: 0, width: 280 }}>
                         { topRightToasts.map((toast) => <React.Fragment key={toast.id}>{ toast.toast }</React.Fragment>) }
                     </div>
             }
             {
                 bottomToasts.length > 0 &&
-                    <div style={{ ...toastContainerStyle, bottom:0, left: '50%', width: 280, transform: 'translate(-50%, 0%)' }}>
+                    <div style={{ ...toastBottomContainerStyle, bottom:0, left: '50%', width: 280, transform: 'translate(-50%, 0%)' }}>
                         { bottomToasts.map((toast) => <React.Fragment key={toast.id}>{ toast.toast }</React.Fragment>) }
                     </div>
             }
             {
                 bottomLeftToasts.length > 0 &&
-                    <div style={{ ...toastContainerStyle, bottom:0, left: 0, width: 280 }}>
+                    <div style={{ ...toastBottomContainerStyle, bottom:0, left: 0, width: 280 }}>
                         { bottomLeftToasts.map((toast) => <React.Fragment key={toast.id}>{ toast.toast }</React.Fragment>) }
                     </div>
             }
             {
                 bottomRightToasts.length > 0 &&
-                    <div style={{ ...toastContainerStyle, bottom:0, right: 0, width: 280 }}>
+                    <div style={{ ...toastBottomContainerStyle, bottom:0, right: 0, width: 280 }}>
                         { bottomRightToasts.map((toast) => <React.Fragment key={toast.id}>{ toast.toast }</React.Fragment>) }
                     </div>
             }
@@ -343,4 +353,4 @@ const ToastProvider = ({
     )
 }
 
-export { ToastContext, ToastProvider, useToastContext, Toast, ToastType, ToastPosition }
+export { ToastContext, ToastProvider, useToastContext, ToastType, ToastPosition }

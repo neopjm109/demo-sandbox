@@ -72,11 +72,10 @@ const items: MenuItem[] = [
     {
         key: "hook",
         label: "Custom Hook",
-        type: "group",
         children: [
             {
                 key: "/hook/link",
-                label: "useLink"
+                label: "useLink",
             },
             {
                 key: "/hook/script",
@@ -166,7 +165,6 @@ const items: MenuItem[] = [
     {
         key: "etc",
         label: "ETC",
-        type: "group",
         children: [
             {
                 key: "state",

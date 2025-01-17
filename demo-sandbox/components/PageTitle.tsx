@@ -5,8 +5,8 @@ const { Title } = Typography;
 const PageTitle = ({ title, description } : any) => {
     return (
         <>
-            <Title level={2} style={{ margin: 0 }}>{ title }</Title>
-            <Title level={5} style={{ margin: 0 }}>{ description }</Title>
+            <Title level={2} style={{ margin:0, marginBottom: 4 }}>{ title }</Title>
+            <Title level={5} style={{ margin: 0, marginBottom: 8 }}>{ description }</Title>
         </>
     );
 }

@@ -1,7 +1,6 @@
 "use client";
 import PageTitle from "@/components/PageTitle";
 import { useModalContext } from "@/config/modal";
-import { Toast, useToastContext } from "@/config/toast";
 import { Button, Typography } from "antd";
 import { useState } from "react";
 
@@ -21,7 +20,6 @@ const CustomModal = ({onClick}: any) => {
 
 export default function Modals() {
   const { show } = useModalContext();
-  const { show : showToast} = useToastContext();
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <PageTitle title={ "Modals" } description={ "Modal Context API 이용한 Modal 생성 예제 페이지입니다." }/>
@@ -30,7 +28,6 @@ export default function Modals() {
           show({
             title: "제목",
             children: <CustomModal onClick={ (text: any) => {
-              showToast(<Toast message="text"/>)
             }}/>
           })
         }}>모달 테스트</Button>
