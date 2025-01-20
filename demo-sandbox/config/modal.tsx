@@ -130,6 +130,8 @@ const Animate = (start: any, end: any) => {
 const reverseAnimate = (props?: ModalProps) => {
     const { id, position, width, height }: any = props;
     let elem: any = document.getElementById(id);
+    let dimElem: any = document.getElementById(`dim_${id}`);
+    dimElem.style.opacity = 0;
     switch (position) {
         case ModalPosition.LEFT:
             elem.style.left = -width + "px";
@@ -303,7 +305,7 @@ const ModalWrap = ({ props, children }: { props: ModalProps | undefined, childre
         >
             <div
                 id={ `dim_${props?.id}` }
-                style={{ position: 'absolute', left:0, right:0, top:0, bottom:0, background: 'rgba(0,0,0,0.25)' }}
+                style={{ position: 'absolute', left:0, right:0, top:0, bottom:0, background: props?.animation ? Animate('rgba(0,0,0,0)', 'rgba(0,0,0,0.25)') : 'rgba(0,0,0,0.25)' }}
                 onClick={ () => {
                     if (props?.outsideClickClose) props.onClose?.();
                     else props?.onOutsideClick?.();
