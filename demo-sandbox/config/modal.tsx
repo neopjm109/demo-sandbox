@@ -106,6 +106,8 @@ type ModalStatesObject = {
 class ModalStates {
     modals : ModalStatesObject[] = [];
     show = (props: ModalProps) => {};
+    showAlert = (props: ModalProps) => {};
+    showConfirm = (props: ModalProps) => {};
     hide = (id?: string) => {};
     hideAll = () => {};
 }
