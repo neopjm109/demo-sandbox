@@ -136,19 +136,19 @@ const reverseAnimate = (props?: ModalProps) => {
     dimElem.style.opacity = 0;
     switch (position) {
         case ModalPosition.LEFT:
-            elem.style.left = -width + "px";
+            elem.style.marginLeft = -width + "px";
             break;
         case ModalPosition.RIGHT: 
-            elem.style.right = -width + "px";
+            elem.style.marginRight = -width + "px";
             break;
         case ModalPosition.TOP: 
-            elem.style.top = -height + "px";
+            elem.style.marginTop = -height + "px";
             break;
-        case ModalPosition.BOTTOM: ``
-            elem.style.bottom = -height + "px";
+        case ModalPosition.BOTTOM:
+            elem.style.marginBottom = -height + "px";
             break;
         default:
-            elem.style.top = (-(height + 32) / 10) + "px";
+            elem.style.marginTop = (-(height + 32) / 10) + "px";
             elem.style.opacity = 0;
             break;
     }
